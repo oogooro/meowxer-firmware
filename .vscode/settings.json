@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "wiring_private.h": "c",
+        "pins_arduino.h": "c",
+        "functional": "cpp",
+        "atomic": "cpp",
+        "cstdint": "cpp"
+    },
+    "files.exclude": {
+        "**/*.rpyc": true,
+        "**/*.rpa": true,
+        "**/*.rpymc": true,
+        "**/cache/": true
+    }
+}
