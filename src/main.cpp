@@ -28,8 +28,8 @@ void setup() {
   buttonsSetup();
   ledSetup();
 
-  initOled();
   delay(100); // oled takes additional 25ms to turn on
+  initOled();
   
   display.drawXBitmap(0, 0, BITMAP_logo2, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
   display.display();
