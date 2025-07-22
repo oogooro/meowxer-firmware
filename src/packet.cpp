@@ -1,7 +1,7 @@
 #include "packet.h"
 
 Packet::Packet(char type) {
-    transmitData = type;
+    transmitData = String(type);
 }
 
 void Packet::appendData(const char* data) {
