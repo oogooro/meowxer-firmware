@@ -3,7 +3,7 @@
 #include "config.h"
 #include "packet.h"
 #include "incomingPacket.h"
-#include "oled128x32.h"
+#include "oled.h"
 #include "channels.h"
 #include "leds.h"
 #include "buttons.h"
@@ -28,11 +28,7 @@ void setup() {
   buttonsSetup();
   ledSetup();
 
-  delay(100); // oled takes additional 25ms to turn on
   initOled();
-  
-  display.drawXBitmap(0, 0, BITMAP_logo2, SCREEN_WIDTH, SCREEN_HEIGHT, SSD1306_WHITE);
-  display.display();
   
   ledAnim();
   delay(100);

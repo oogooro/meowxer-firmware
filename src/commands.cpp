@@ -1,5 +1,5 @@
 #include "commands.h"
-#include "oled128x32.h"
+#include "oled.h"
 #include "leds.h"
 #include "channels.h"
 #include "packet.h"
@@ -24,13 +24,18 @@ void handleOled(IncomingPacket* pkt) {
     const char subcommand = pkt->getArgChar(COMMAND_OLED_ARGUMENT_SUBCOMMAND);
 
     if (subcommand == COMMAND_OLED_SUBCOMMAND_VOLUME) {
-        drawVolume(pkt->getArgInt(COMMAND_OLED_ARGUMENT_VOLUME));
+        drawVolume(pkt->getArgInt(COMMAND_OLED_ARGUMENT_VOLUME), pkt->getArgInt(COMMAND_OLED_ARGUMENT_VOLUME_CHANNEL));
     } else if (subcommand == COMMAND_OLED_SUBCOMMAND_CLEAR) {
         clearOled();
     } else if (subcommand == COMMAND_OLED_SUBCOMMAND_BRIGHTNESS) {
         setOledBrightness(pkt->getArgInt(COMMAND_OLED_ARGUMENT_BRIGHTNESS));
     } else if (subcommand == COMMAND_OLED_SUBCOMMAND_MUTE) {
         drawMute(pkt->getArgInt(COMMAND_OLED_ARGUMENT_MUTE_CHANNEL), pkt->getArgChar(COMMAND_OLED_ARGUMENT_MUTE_UNMUTE) == '1');
+    } else if (subcommand == COMMAND_OLED_SUBCOMMAND_REGISTER_CHANNEL_NAMES) {
+        for (uint8_t i = COMMAND_OLED_ARGUMENT_REGISTER_CHANNEL_NAMES_START; i < pkt->argCount; i++) {
+            if (i > NUM_OF_CHANNELS) break;
+            channelNames[i - COMMAND_OLED_ARGUMENT_REGISTER_CHANNEL_NAMES_START] = pkt->getArgDecoded(i);
+        }
     }
 }
 
