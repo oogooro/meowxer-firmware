@@ -1,5 +1,6 @@
 #pragma once
 #include <Arduino.h>
+#include <Base64.h>
 
 class IncomingPacket {
     private:
@@ -11,6 +12,7 @@ class IncomingPacket {
     char type;
     IncomingPacket(const char* rawBytes, uint16_t rawSize);
     String getArg(uint8_t index);
+    String getArgDecoded(uint8_t index);
     int getArgInt(uint8_t index);
     char getArgChar(uint8_t index);
 };

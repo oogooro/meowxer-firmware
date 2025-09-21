@@ -32,6 +32,20 @@ String IncomingPacket::getArg(uint8_t index) {
     return String(buffer);
 }
 
+String IncomingPacket::getArgDecoded(uint8_t index) {
+    String encoded = getArg(index);
+    int encLen = encoded.length();
+
+    char encCstr[encLen];
+    strncpy(encCstr, encoded.c_str(), encLen);
+
+    uint8_t decodedLen = base64_dec_len(encCstr, encLen);
+    char decoded[decodedLen];
+    base64_decode(decoded, encCstr, encLen);
+    
+    return String(decoded);
+}
+
 int IncomingPacket::getArgInt(uint8_t index) {
     return getArg(index).toInt();
 }
