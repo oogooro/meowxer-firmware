@@ -44,6 +44,7 @@ void setup() {
 void loop() {
   if (!Serial) { // Driver disconnected
     initalized = false;
+    clearOled();
     while (!Serial) {} // Wait for serial
     delay(200);
     sendBootPacket();
