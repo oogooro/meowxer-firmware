@@ -8,11 +8,12 @@
 #include "leds.h"
 #include "buttons.h"
 #include "commands.h"
+#include "heartbeat.h"
 
 bool initalized = false;
 
 void sendBootPacket() {
-  Packet bootPacket('$');
+  Packet bootPacket(COMMAND_OUTGOING_BOOT);
   bootPacket.appendData(SERIAL_PROTO_VERSION);
   bootPacket.appendData(HARDWARE_VERSION);
   bootPacket.appendData(NUM_OF_CHANNELS);
@@ -43,8 +44,7 @@ void setup() {
 
 void loop() {
   if (!Serial) { // Driver disconnected
-    initalized = false;
-    clearOled();
+    onDisconnect();
     while (!Serial) {} // Wait for serial
     delay(200);
     sendBootPacket();
@@ -66,7 +66,7 @@ void loop() {
 
   if (initalized) {
     if (readPots()) {
-      Packet potsPacket('=');
+      Packet potsPacket(COMMAND_OUTGOING_CHANNELS);
       for (auto pot : potsMapped) {
         potsPacket.appendData(pot);
       }
@@ -74,9 +74,21 @@ void loop() {
     }
 
     if (readButtons()) {
-      Packet buttonsPacket('b');
+      Packet buttonsPacket(COMMAND_OUTGOING_BUTTONS);
       buttonsPacket.appendData(pressedButtons);
       buttonsPacket.transmit();
     }
+
+    if (configBitfieldCommon & CONFIG_BITFIELD_COMMON_HEARTBEAT_ENABLED) {
+      heartbeat();
+    }
   }
+}
+
+void onDisconnect(void) {
+  initalized = false;
+  clearOled();
+  bool ledsAllOff[NUM_OF_LEDS]{ false };
+  ledSet(ledsAllOff);
+  configBitfieldCommon = 0;
 }

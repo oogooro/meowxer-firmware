@@ -5,6 +5,7 @@
 #include "packet.h"
 #include "config.h"
 #include "main.h"
+#include "heartbeat.h"
 
 void (*commandMap[128])(IncomingPacket* pkt) { nullptr };
 
@@ -14,6 +15,8 @@ void initHandler() {
     commandMap[COMMAND_INCOMING_LEDS] = handleLeds;
     commandMap[COMMAND_INCOMING_FORCE_READ] = handleForceRead;
     commandMap[COMMAND_INCOMING_CONFIG] = handleConfig;
+    commandMap[COMMAND_INCOMING_HEARTBEAT] = handleHeartbeat;
+    commandMap[COMMAND_INCOMING_DISCONNECT] = handleDisconnect;
 }
 
 void handleInit(IncomingPacket* pkt) {
@@ -66,4 +69,20 @@ void handleForceRead(IncomingPacket* pkt) {
 }
 
 void handleConfig(IncomingPacket* pkt) {
+    setConfigBitfield(pkt->getArgInt(COMMAND_CONFIG_ARGUMENT_BITFIELD_TYPE), pkt->getArgInt(COMMAND_CONFIG_ARGUMENT_BITFIELD_VALUE));
+}
+
+void handleHeartbeat(IncomingPacket* pkt) {
+    if (pkt->getArgChar(COMMAND_HEARTBEAT_ARGUMENT_HEARTBEAT_TYPE) == COMMAND_HEARTBEAT_PONG) {
+        heartbeatAckFailedTimes = 0;
+    } else { // PING
+        Packet heartbeatPkt(COMMAND_OUTGOING_HEARTBEAT);
+        heartbeatPkt.appendData(COMMAND_HEARTBEAT_PING);
+        heartbeatPkt.appendData(pkt->getArgInt(1));
+        heartbeatPkt.transmit();
+    }
+}
+
+void handleDisconnect(IncomingPacket* pkt) {
+    onDisconnect();
 }

@@ -6,6 +6,14 @@
 #define COMMAND_INCOMING_LEDS 'l'
 #define COMMAND_INCOMING_FORCE_READ 'r'
 #define COMMAND_INCOMING_CONFIG 'c'
+#define COMMAND_INCOMING_HEARTBEAT 'h'
+#define COMMAND_INCOMING_DISCONNECT 'd'
+
+#define COMMAND_OUTGOING_BOOT '$'
+#define COMMAND_OUTGOING_CHANNELS '='
+#define COMMAND_OUTGOING_BUTTONS 'b'
+#define COMMAND_OUTGOING_DEBUG '#'
+#define COMMAND_OUTGOING_HEARTBEAT 'h'
 
 #define COMMAND_OLED_ARGUMENT_SUBCOMMAND 0
 #define COMMAND_OLED_ARGUMENT_VOLUME 1
@@ -25,6 +33,13 @@
 #define COMMAND_LEDS_SUBCOMMAND_SET '0'
 #define COMMAND_LEDS_SUBCOMMAND_BRIGHTNESS '1'
 
+#define COMMAND_CONFIG_ARGUMENT_BITFIELD_TYPE 0
+#define COMMAND_CONFIG_ARGUMENT_BITFIELD_VALUE 0
+
+#define COMMAND_HEARTBEAT_PING 's'
+#define COMMAND_HEARTBEAT_PONG 'a'
+#define COMMAND_HEARTBEAT_ARGUMENT_HEARTBEAT_TYPE 0
+
 extern void (*commandMap[128])(IncomingPacket* pkt);
 
 void initHandler();
@@ -33,3 +48,5 @@ void handleOled(IncomingPacket* pkt);
 void handleLeds(IncomingPacket* pkt);
 void handleForceRead(IncomingPacket* pkt);
 void handleConfig(IncomingPacket* pkt);
+void handleHeartbeat(IncomingPacket* pkt);
+void handleDisconnect(IncomingPacket* pkt);
