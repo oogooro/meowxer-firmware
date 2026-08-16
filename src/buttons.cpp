@@ -4,6 +4,7 @@ const uint8_t buttonPins[NUM_OF_BUTTONS] = { PA15, PA10, PA9, PA8, PB15 };
 
 unsigned long buttonsUpdatedTimestamp = millis();
 uint8_t pressedButtons = 0;
+uint8_t longpressed = 0;
 
 void buttonsSetup() {
     for (const auto buttonPin : buttonPins) {
@@ -28,4 +29,15 @@ bool readButtons() {
     } else {
         return false;
     }
+}
+
+uint8_t readLongpress() {
+    if (pressedButtons && (millis() - buttonsUpdatedTimestamp >= LONGPRESS_TIME)) {
+        if (pressedButtons != longpressed) {
+            longpressed = pressedButtons;
+            return longpressed;
+        }
+    }
+
+    return 0;
 }

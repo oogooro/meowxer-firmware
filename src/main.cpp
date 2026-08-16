@@ -79,6 +79,9 @@ void loop() {
       buttonsPacket.transmit();
     }
 
+    if (uint8_t longPressed = readLongpress()) {
+    }
+
     if (configBitfieldCommon & CONFIG_BITFIELD_COMMON_HEARTBEAT_ENABLED) {
       heartbeat();
     }
