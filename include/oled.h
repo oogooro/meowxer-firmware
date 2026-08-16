@@ -3,26 +3,17 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <Adafruit_SH110X.h>
 #include "bitmaps.h"
 #include "channels.h"
 
-#ifdef OLED_128x64
-    #define SCREEN_WIDTH 128
-    #define SCREEN_HEIGHT 64
-#elif OLED_128x32
-    #define SCREEN_WIDTH 128
-    #define SCREEN_HEIGHT 32
-#elif OLED_128x128
-    #define SCREEN_WIDTH 128
-    #define SCREEN_HEIGHT 128
-#else
-    #error Oled size not defined.
-#endif
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 128
 
 #define OLED_RESET     -1
-#define SCREEN_ADDRESS 0x3C
+#ifndef SCREEN_ADDRESS
+    #define SCREEN_ADDRESS 0x3C
+#endif
 
 extern Adafruit_SH1107 display;
 extern String channelNames[NUM_OF_CHANNELS];
